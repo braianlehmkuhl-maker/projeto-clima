@@ -11,13 +11,12 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- Conecta o site ao manifest do PWA -->
+    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Ícone para dispositivos Apple -->
+    <!-- Ícone -->
     <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-    <!-- Permite o comportamento de aplicativo no iPhone -->
     <meta name="apple-mobile-web-app-capable" content="yes">
 
 </head>
@@ -28,7 +27,9 @@
 
         <h1>Consulta do Clima</h1>
 
-        <label for="cidade">Digite uma cidade:</label>
+        <label for="cidade">
+            Digite uma cidade:
+        </label>
 
         <input
             type="text"
@@ -37,12 +38,13 @@
         >
 
         <button id="buscar">
-            Buscar clima
+            Consultar Clima
         </button>
 
         <section id="resultado"></section>
 
     </main>
+
 
     <script src="script.js"></script>
 

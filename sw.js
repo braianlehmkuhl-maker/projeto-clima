@@ -1,13 +1,13 @@
-// ================================
+// ========================================
 // NOME DO CACHE
-// ================================
+// ========================================
 
-const CACHE_NAME = "consulta-clima-v1";
+const CACHE_NAME = "consulta-clima-v2";
 
 
-// ================================
-// ARQUIVOS QUE SERÃO GUARDADOS
-// ================================
+// ========================================
+// ARQUIVOS DO SITE
+// ========================================
 
 const ARQUIVOS_PARA_CACHE = [
 
@@ -28,49 +28,103 @@ const ARQUIVOS_PARA_CACHE = [
 ];
 
 
-// ================================
-// INSTALAÇÃO DO SERVICE WORKER
-// ================================
+// ========================================
+// INSTALAÇÃO
+// ========================================
 
-self.addEventListener("install", function(event) {
+self.addEventListener(
+    "install",
+    function (event) {
 
-    event.waitUntil(
+        event.waitUntil(
 
-        caches.open(CACHE_NAME)
+            caches.open(CACHE_NAME)
 
-            .then(function(cache) {
+                .then(function (cache) {
 
-                return cache.addAll(ARQUIVOS_PARA_CACHE);
+                    return cache.addAll(
+                        ARQUIVOS_PARA_CACHE
+                    );
 
-            })
+                })
 
-    );
+        );
 
-});
+        self.skipWaiting();
+
+    }
+);
 
 
-// ================================
-// BUSCA DOS ARQUIVOS
-// ================================
+// ========================================
+// ATIVAÇÃO
+// ========================================
 
-self.addEventListener("fetch", function(event) {
+self.addEventListener(
+    "activate",
+    function (event) {
 
-    event.respondWith(
+        event.waitUntil(
 
-        caches.match(event.request)
+            caches.keys()
 
-            .then(function(resposta) {
+                .then(function (nomesCaches) {
 
-                if (resposta) {
+                    return Promise.all(
 
-                    return resposta;
+                        nomesCaches.map(
+                            function (nomeCache) {
 
-                }
+                                if (
+                                    nomeCache !== CACHE_NAME
+                                ) {
 
-                return fetch(event.request);
+                                    return caches.delete(
+                                        nomeCache
+                                    );
 
-            })
+                                }
 
-    );
+                            }
+                        )
 
-});
+                    );
+
+                })
+
+        );
+
+        self.clients.claim();
+
+    }
+);
+
+
+// ========================================
+// BUSCA ARQUIVOS
+// ========================================
+
+self.addEventListener(
+    "fetch",
+    function (event) {
+
+        event.respondWith(
+
+            caches.match(event.request)
+
+                .then(function (resposta) {
+
+                    if (resposta) {
+
+                        return resposta;
+
+                    }
+
+                    return fetch(event.request);
+
+                })
+
+        );
+
+    }
+);
